@@ -14,16 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class LoopingServlet
+ * Servlet implementation class DetailedView
  */
-@WebServlet("/LoopingServlet")
-public class LoopingServlet extends HttpServlet {
+@WebServlet("/DetailedView")
+public class DetailedView extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoopingServlet() {
+    public DetailedView() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,18 +32,18 @@ public class LoopingServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String name = "<table><tr><td>Name</td><td>Breed</td></tr>";
+		String name = "<table><tr><td>ID</td><td>Name</td><td>Breed</td><td>Age</td><td>Dead</td></tr>";
 
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:ora1/ora1@localhost:1521:orcl");
-			PreparedStatement pstmt = con.prepareStatement("select name, breed from pet");
+			PreparedStatement pstmt = con.prepareStatement("select * from pet where name = ?");
+			pstmt.setString(1, request.getParameter("petname"));
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()){
-				name += "<tr><td><form action=\"DetailedView\" method=\"get\"><input type=\"hidden\" name=\"petname\" value=\"" 
-						+ rs.getString(1) + "\">" + "<input type=\"submit\" value=\"" + rs.getString(1) 
-						+ "\"></form></td><td>" + rs.getString(2) + "</td></tr>";
+				name += "<tr><td>" + rs.getInt(1) + "</td><td>" + rs.getString(2) 
+				+ "</td><td>" + rs.getString(3) + "</td><td>" + rs.getInt(4) 
+				+ "</td><td>" + rs.getInt(5) + "</td><\tr>";
 			}
 			rs.close();
 			con.close();
@@ -54,7 +54,7 @@ public class LoopingServlet extends HttpServlet {
 			e.printStackTrace();
 			name = "class not found error";
 		}
-		name += "</table>";
+		name+="</table>";
 		request.setAttribute("messages", name);
 		request.getRequestDispatcher("/customer.jsp").forward(request, response);
 	}
