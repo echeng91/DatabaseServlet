@@ -33,7 +33,7 @@ public class LoopingServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String name = "";
+		String name = "<table><tr><td>Name</td><td>Breed</td></tr>";
 
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -41,7 +41,7 @@ public class LoopingServlet extends HttpServlet {
 			PreparedStatement pstmt = con.prepareStatement("select name, breed from pet");
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()){
-				name += rs.getString(1) + "&nbspthe&nbsp" + rs.getString(2) + "<br>";
+				name += "<tr><td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td></tr>";
 			}
 			rs.close();
 			con.close();
@@ -52,6 +52,7 @@ public class LoopingServlet extends HttpServlet {
 			e.printStackTrace();
 			name = "class not found error";
 		}
+		name += "</table>";
 		request.setAttribute("messages", name);
 		request.getRequestDispatcher("/customer.jsp").forward(request, response);
 	}
