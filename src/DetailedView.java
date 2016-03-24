@@ -43,7 +43,7 @@ public class DetailedView extends HttpServlet {
 			while(rs.next()){
 				name += "<tr><td>" + rs.getInt(1) + "</td><td>" + rs.getString(2) 
 				+ "</td><td>" + rs.getString(3) + "</td><td>" + rs.getInt(4) 
-				+ "</td><td>" + rs.getInt(5) + "</td><\tr>";
+				+ "</td><td>" + rs.getInt(5) + "</td></tr>";
 			}
 			rs.close();
 			con.close();
