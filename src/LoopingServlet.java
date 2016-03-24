@@ -7,9 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,41 +14,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class DatabaseServlet
+ * Servlet implementation class LoopingServlet
  */
-@WebServlet("/DatabaseServlet")
-public class DatabaseServlet extends HttpServlet {
+@WebServlet("/LoopingServlet")
+public class LoopingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DatabaseServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public LoopingServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = "";
 
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:ora1/ora1@localhost:1521:orcl");
-			PreparedStatement pstmt = con.prepareStatement("select name from pet where id = 0");
+			PreparedStatement pstmt = con.prepareStatement("select name, breed from pet");
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()){
-				name = rs.getString(1);
+				name += rs.getString(1) + "&nbspthe&nbsp" + rs.getString(2) + "<br>";
 			}
 			rs.close();
 			con.close();
@@ -64,6 +54,14 @@ public class DatabaseServlet extends HttpServlet {
 		}
 		request.setAttribute("messages", name);
 		request.getRequestDispatcher("/customer.jsp").forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

@@ -7,11 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="DatabaseServlet" method="post">
-		<p>
-			<input type="submit"> 
-			<span class="info">${messages}</span>
-		</p>
-	</form>
+	<p>${messages}</p>
+	
+	<a href="index.html">Return to index</a>
 </body>
 </html>
